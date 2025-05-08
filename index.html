@@ -1,60 +1,116 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>나의 첫 웹사이트</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>다크 모드 웹사이트</title>
   <style>
+    :root {
+      --bg-color: white;
+      --text-color: black;
+      --header-color: #4CAF50;
+      --button-bg: #4CAF50;
+      --button-hover: #45a049;
+      --toggle-bg: white;
+      --toggle-text: black;
+    }
+
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --header-color: #2e7d32;
+      --button-bg: #388e3c;
+      --button-hover: #2e7d32;
+      --toggle-bg: #333;
+      --toggle-text: white;
+    }
+
     body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Arial', sans-serif;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
     }
+
     header {
-      background-color: #4a90e2;
+      background-color: var(--header-color);
       color: white;
-      padding: 2rem;
-      text-align: center;
+      padding: 60px 20px;
+      position: relative;
     }
+
+    .mode-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: var(--toggle-bg);
+      color: var(--toggle-text);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
     section {
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
+      padding: 40px 20px;
     }
-    .button {
+
+    a.button {
       display: inline-block;
-      background-color: #4a90e2;
+      padding: 10px 20px;
+      background-color: var(--button-bg);
       color: white;
-      padding: 0.75rem 1.5rem;
       text-decoration: none;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
+      border-radius: 5px;
+      margin-top: 20px;
     }
-    .button:hover {
-      background-color: #357ABD;
-    }
-    footer {
-      background-color: #eee;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
+
+    a.button:hover {
+      background-color: var(--button-hover);
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>안녕하세요!</h1>
-    <p>이것은 나의 첫 번째 웹사이트입니다</p>
+    <button class="mode-toggle" id="modeToggle" onclick="toggleMode()">🌙 다크 모드</button>
+    <h1>환영합니다!</h1>
+    <p>나의 첫 번째 웹사이트에 오신 것을 환영합니다.</p>
   </header>
 
-  <section>
-    <h2>소개</h2>
-    <p>아직은 아무것도 없어습니다..</p>
-  </section>
+  <script>
+    const modeToggle = document.getElementById('modeToggle');
 
-  <footer>
-    © 2025 나의 웹사이트. 모든 권리 보유.
-  </footer>
+    // 모드 토글 함수
+    function toggleMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateToggleText();
+    }
+
+    // 버튼 텍스트 갱신
+    function updateToggleText() {
+      const isDark = document.body.classList.contains('dark-mode');
+      modeToggle.textContent = isDark ? '☀️ 라이트 모드' : '🌙 다크 모드';
+    }
+
+    // 시스템 설정 또는 저장된 설정 감지
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.body.classList.add('dark-mode');
+      }
+      updateToggleText();
+    }
+
+    initTheme(); // 초기 실행
+  </script>
+
 </body>
 </html>
